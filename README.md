@@ -1,66 +1,113 @@
-# Ollama Chat Terminal
+# Ollama Chat UI
 
-A terminal-based UI for chatting with Ollama models.
+This repository contains four implementations of a chat UI for Ollama:
 
-## Features
+1. A Ruby implementation using Sinatra with Tailwind CSS
+2. A Python implementation using Flask with Tailwind CSS
+3. A terminal-based implementation using Python curses
+4. A GUI implementation using Python and Tkinter
 
-- Interactive terminal UI with curses
-- Model selection from available Ollama models
-- Adjustable temperature
-- Command system for controlling the chat
-- Keyboard shortcuts
+All implementations provide interfaces to interact with Ollama's API, allowing you to chat with any model you have installed in Ollama.
 
 ## Requirements
 
-- Python 3.7+
-- Ollama running on your machine
-- `requests` Python package
+- Ollama installed and running on your machine (https://ollama.com/download)
+- Python 3.7+ (for Python, GUI, and terminal implementations)
+- Ruby 3.0+ (for Ruby implementation)
+- Tkinter (usually included with Python, required for GUI implementation)
+- Docker and Docker Compose (optional, for containerized setup)
 
-## Installation
+## Quick Start
+
+### Using the Universal Launcher
+
+The `ollama-chat` script provides a unified way to launch any of the implementations:
 
 ```bash
-# Install required packages
-pip install requests
-
 # Make the script executable
-chmod +x ollama_chat.py
+chmod +x ollama-chat
+
+# Launch terminal UI
+./ollama-chat
+
+# Launch terminal UI with a specific model
+./ollama-chat --model llama3
+
+# Launch GUI application
+./ollama-chat --gui
+
+# Launch Python web UI
+./ollama-chat --web
+
+# Launch Ruby web UI
+./ollama-chat --web --ruby
 ```
 
-## Usage
+### Using Docker Compose
 
 ```bash
-# Basic usage
-./ollama_chat.py
-
-# Specify a model directly
-./ollama_chat.py --model llama3
-
-# Set temperature
-./ollama_chat.py --temp 0.5
-
-# Set maximum tokens
-./ollama_chat.py --max-tokens 2048
-
-# Specify custom API URL
-./ollama_chat.py --api-url http://custom-ollama-server:11434/api
+docker-compose up -d
 ```
 
-## Commands
+This will start both web applications:
+- Ruby app at http://localhost:4567
+- Python app at http://localhost:5000
 
-While in the chat interface, you can use the following commands:
+## Features
 
+### Web UI Features
+- Select from available Ollama models
+- Adjust temperature and other generation parameters
+- Chat with the selected model
+- Markdown-like formatting in responses
+- Responsive design for mobile and desktop
+- System prompt support
+- Tailwind CSS styling
+
+### GUI Features
+- Native desktop application using Tkinter
+- Clean, user-friendly interface
+- Model selection and parameter adjustment
+- Save and load chat histories
+- Copy responses to clipboard
+- Code block formatting
+- Keyboard shortcuts
+
+### Terminal UI Features
+- Interactive terminal interface with curses
+- Model selection
+- Temperature adjustment
+- Command system for controlling the chat
+- Keyboard shortcuts
+
+## Commands and Shortcuts
+
+### Terminal Commands
+While in the terminal chat interface, you can use the following commands:
 - `/exit` or `/quit` - Exit the application
 - `/temp [value]` - Set temperature (0-1)
 - `/clear` - Clear chat history
 - `/help` - Show help
 
-## Keyboard Shortcuts
+### GUI Keyboard Shortcuts
+- `Ctrl+Enter`: Send message
+- `Ctrl+S`: Save chat
+- `Ctrl+O`: Load chat
+- `Ctrl+N`: New chat
 
-- `Ctrl+C` - Exit the application
-- `Ctrl+G` - Submit message (when in input box)
+## Environment Variables
+
+All implementations support the following environment variables:
+
+- `OLLAMA_API_URL`: URL of the Ollama API (default: http://localhost:11434/api)
 
 ## Troubleshooting
 
 - Make sure Ollama is running on your machine
 - Check that you have at least one model downloaded in Ollama
-- If you see display issues, try resizing your terminal window
+- If using Docker, ensure that host.docker.internal resolves to your host machine
+- For GUI issues, ensure Tkinter is properly installed with your Python distribution
+
+## License
+
+MIT
