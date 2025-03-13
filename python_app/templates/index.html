@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ollama Chat UI - Python</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#f5f3ff',
+              100: '#ede9fe',
+              200: '#ddd6fe',
+              300: '#c4b5fd',
+              400: '#a78bfa',
+              500: '#8b5cf6',
+              600: '#7c3aed',
+              700: '#6d28d9',
+              800: '#5b21b6',
+              900: '#4c1d95',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gray-50 text-gray-900 min-h-screen">
+  <div class="container mx-auto px-4 py-6 flex flex-col min-h-screen max-w-6xl">
+    <header class="text-center mb-6 pb-4 border-b border-gray-200">
+      <h1 class="text-3xl font-bold text-primary-600">Ollama Chat UI</h1>
+      <p class="text-gray-500">Python Implementation</p>
+    </header>
+
+    <div class="flex flex-col md:flex-row h-[calc(100vh-180px)] border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+      <div class="w-full md:w-64 bg-primary-600 text-white p-4 overflow-y-auto">
+        <div class="mb-6">
+          <h3 class="text-lg font-medium mb-2">Select Model</h3>
+          <select id="model-selector" class="w-full p-2 bg-white text-gray-800 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-400">
+            <option value="" disabled selected>Loading models...</option>
+          </select>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-medium mb-2">Settings</h3>
+          <div class="mb-4">
+            <label for="temperature" class="block mb-1">Temperature:</label>
+            <div class="flex items-center">
+              <input type="range" id="temperature" min="0" max="1" step="0.1" value="0.7"
+                     class="w-full h-2 bg-primary-200 rounded-lg appearance-none cursor-pointer">
+              <span id="temperature-value" class="ml-2 text-white font-medium">0.7</span>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label for="max-tokens" class="block mb-1">Max Tokens:</label>
+            <input type="number" id="max-tokens" min="10" max="4096" value="1024"
+                   class="w-full p-2 bg-white text-gray-800 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-400">
+          </div>
+
+          <div class="mb-4">
+            <label for="system-prompt" class="block mb-1">System Prompt:</label>
+            <textarea id="system-prompt" rows="3" placeholder="Optional system prompt..."
+                      class="w-full p-2 bg-white text-gray-800 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-400 resize-none"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex-1 flex flex-col bg-white">
+        <div id="chat-messages" class="flex-1 p-4 overflow-y-auto">
+          <div class="mx-auto max-w-md p-3 mb-4 bg-gray-100 border border-gray-200 rounded-lg text-center">
+            <p>Welcome to Ollama Chat UI! Select a model and start chatting.</p>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-200 p-4">
+          <form id="chat-form" class="flex gap-2">
+            <textarea id="user-input" placeholder="Type your message here... (Ctrl+Enter to send)" rows="3"
+                      class="flex-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 resize-none"></textarea>
+            <button type="submit" id="send-button"
+                    class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-400 transition-colors">
+              Send
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <footer class="mt-auto pt-6 text-center text-gray-500 text-sm border-t border-gray-200">
+      <p>&copy; 2023 Ollama Chat UI</p>
+    </footer>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

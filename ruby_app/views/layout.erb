@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ollama Chat UI - Ruby</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              200: '#bae6fd',
+              300: '#7dd3fc',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              800: '#075985',
+              900: '#0c4a6e',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gray-50 text-gray-900 min-h-screen">
+  <div class="container mx-auto px-4 py-6 flex flex-col min-h-screen max-w-6xl">
+    <header class="text-center mb-6 pb-4 border-b border-gray-200">
+      <h1 class="text-3xl font-bold text-primary-600">Ollama Chat UI</h1>
+      <p class="text-gray-500">Ruby Implementation</p>
+    </header>
+
+    <%= yield %>
+
+    <footer class="mt-auto pt-6 text-center text-gray-500 text-sm border-t border-gray-200">
+      <p>&copy; <%= Time.now.year %> Ollama Chat UI</p>
+    </footer>
+  </div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
