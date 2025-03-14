@@ -1,0 +1,109 @@
+extends layout
+
+block content
+  .container-fluid
+    .row.vh-100
+      //- Sidebar
+      .col-md-3.col-lg-2.d-md-block.bg-dark.sidebar.collapse
+        .position-sticky.pt-3
+          .px-3.py-2.d-flex.justify-content-between.align-items-center
+            h5.text-white Ollama Chat
+            span.badge.bg-secondary JS
+          
+          hr.text-white-50
+          
+          .px-3.mb-3
+            button#newChatBtn.btn.btn-primary.w-100
+              i.fas.fa-plus-circle.me-2
+              | New Chat
+          
+          .px-3
+            h6.text-white-50 Settings
+            
+            .mb-3
+              label.form-label.text-white-50(for="modelSelect") Model
+              select#modelSelect.form-select.form-select-sm
+                option(value="") Loading models...
+            
+            .mb-3
+              label.form-label.text-white-50(for="temperatureRange")
+                | Temperature: 
+                span#temperatureValue 0.7
+              input#temperatureRange.form-range(type="range", min="0", max="1", step="0.1", value="0.7")
+            
+            .mb-3
+              label.form-label.text-white-50(for="maxTokensInput") Max Tokens
+              input#maxTokensInput.form-control.form-control-sm(type="number", value="1024", min="10", max="4096")
+            
+            .mb-3
+              label.form-label.text-white-50(for="systemPromptInput") System Prompt
+              textarea#systemPromptInput.form-control.form-control-sm(rows="3") You are a helpful assistant.
+          
+          hr.text-white-50
+          
+          .px-3
+            h6.text-white-50 Connection
+            .mb-3
+              label.form-label.text-white-50(for="apiUrlInput") API URL
+              input#apiUrlInput.form-control.form-control-sm(type="text", value="http://localhost:11434/api")
+            button#testConnectionBtn.btn.btn-sm.btn-outline-light.w-100 Test Connection
+          
+          hr.text-white-50
+          
+          .px-3.mt-auto.text-center.text-white-50.small
+            p Ollama Chat v1.0.0
+            p JavaScript Implementation
+      
+      //- Main content
+      .col-md-9.col-lg-10.ms-sm-auto.px-md-4
+        .d-flex.justify-content-between.flex-wrap.flex-md-nowrap.align-items-center.pt-3.pb-2.mb-3.border-bottom
+          h1.h2 Chat
+          .btn-toolbar.mb-2.mb-md-0
+            .btn-group.me-2
+              button#clearChatBtn.btn.btn-sm.btn-outline-secondary
+                i.fas.fa-trash.me-1
+                | Clear
+              button#saveChatBtn.btn.btn-sm.btn-outline-secondary
+                i.fas.fa-save.me-1
+                | Save
+        
+        //- Chat messages container
+        #chatContainer.chat-container.mb-3
+          .system-message
+            .message-content
+              p Welcome to Ollama Chat! Select a model to start chatting.
+        
+        //- Input area
+        .input-area
+          .card
+            .card-body
+              .mb-2
+                button#attachFileBtn.btn.btn-sm.btn-outline-secondary.me-1
+                  i.fas.fa-paperclip
+                button#codeSnippetBtn.btn.btn-sm.btn-outline-secondary.me-1
+                  i.fas.fa-code
+                .form-check.form-check-inline
+                  input#reasoningCheck.form-check-input(type="checkbox")
+                  label.form-check-label(for="reasoningCheck") Include reasoning
+              
+              textarea#userInput.form-control(rows="3", placeholder="Type your message here...")
+              
+              .d-flex.justify-content-end.mt-2
+                button#sendBtn.btn.btn-primary
+                  i.fas.fa-paper-plane.me-1
+                  | Send
+        
+        //- File attachments area (hidden by default)
+        #attachmentsContainer.mt-3.d-none
+          .card
+            .card-header.d-flex.justify-content-between.align-items-center
+              h6.mb-0 Attached Files
+              button#clearAttachmentsBtn.btn.btn-sm.btn-outline-danger
+                i.fas.fa-times
+                |  Clear All
+            .card-body
+              ul#attachmentsList.list-group.list-group-flush
+                //- Attachments will be added here
+
+block scripts
+  script(src="/js/chat.js")

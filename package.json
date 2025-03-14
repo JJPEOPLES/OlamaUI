@@ -1,0 +1,31 @@
+{
+  "name": "ollama-chat-js",
+  "version": "1.0.0",
+  "description": "JavaScript implementation of Ollama Chat UI",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ollama",
+    "chat",
+    "ai",
+    "llm"
+  ],
+  "author": "Ollama Chat UI Team",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.8.3",
+    "body-parser": "^1.20.3",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "marked": "^9.1.6",
+    "morgan": "^1.10.0",
+    "pug": "^3.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
