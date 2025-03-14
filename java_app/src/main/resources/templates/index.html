@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ollama Chat - Java Implementation</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.3/css/bootstrap.min.css}">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/6.4.0/css/all.min.css}">
+    
+    <!-- Highlight.js for code highlighting -->
+    <link rel="stylesheet" th:href="@{/webjars/highlight.js/11.7.0/styles/github-dark.min.css}">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="bg-light">
+    <div class="container-fluid">
+        <div class="row vh-100">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <div class="px-3 py-2 d-flex justify-content-between align-items-center">
+                        <h5 class="text-white">Ollama Chat</h5>
+                        <span class="badge bg-secondary">Java</span>
+                    </div>
+                    
+                    <hr class="text-white-50">
+                    
+                    <div class="px-3 mb-3">
+                        <button id="newChatBtn" class="btn btn-primary w-100">
+                            <i class="fas fa-plus-circle me-2"></i>New Chat
+                        </button>
+                    </div>
+                    
+                    <div class="px-3">
+                        <h6 class="text-white-50">Settings</h6>
+                        
+                        <div class="mb-3">
+                            <label for="modelSelect" class="form-label text-white-50">Model</label>
+                            <select id="modelSelect" class="form-select form-select-sm">
+                                <option value="">Select a model</option>
+                                <option th:each="model : ${models}" th:value="${model.name}" th:text="${model.name}"></option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="temperatureRange" class="form-label text-white-50">
+                                Temperature: <span id="temperatureValue">0.7</span>
+                            </label>
+                            <input type="range" class="form-range" id="temperatureRange" min="0" max="1" step="0.1" value="0.7">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="maxTokensInput" class="form-label text-white-50">Max Tokens</label>
+                            <input type="number" class="form-control form-control-sm" id="maxTokensInput" value="1024" min="10" max="4096">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="systemPromptInput" class="form-label text-white-50">System Prompt</label>
+                            <textarea class="form-control form-control-sm" id="systemPromptInput" rows="3">You are a helpful assistant.</textarea>
+                        </div>
+                    </div>
+                    
+                    <hr class="text-white-50">
+                    
+                    <div class="px-3">
+                        <h6 class="text-white-50">Connection</h6>
+                        <div class="mb-3">
+                            <label for="apiUrlInput" class="form-label text-white-50">API URL</label>
+                            <input type="text" class="form-control form-control-sm" id="apiUrlInput" th:value="${apiUrl}">
+                        </div>
+                        <button id="testConnectionBtn" class="btn btn-sm btn-outline-light w-100">Test Connection</button>
+                    </div>
+                    
+                    <hr class="text-white-50">
+                    
+                    <div class="px-3 mt-auto text-center text-white-50 small">
+                        <p>Ollama Chat v1.0.0</p>
+                        <p>Java Implementation</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main content -->
+            <div class="col-md-9 col-lg-10 ms-sm-auto px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Chat</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <button id="clearChatBtn" class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-trash me-1"></i>Clear
+                            </button>
+                            <button id="saveChatBtn" class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-save me-1"></i>Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Chat messages container -->
+                <div id="chatContainer" class="chat-container mb-3">
+                    <div class="system-message">
+                        <div class="message-content">
+                            <p>Welcome to Ollama Chat! Select a model to start chatting.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Input area -->
+                <div class="input-area">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="mb-2">
+                                <button id="attachFileBtn" class="btn btn-sm btn-outline-secondary me-1">
+                                    <i class="fas fa-paperclip"></i>
+                                </button>
+                                <button id="codeSnippetBtn" class="btn btn-sm btn-outline-secondary me-1">
+                                    <i class="fas fa-code"></i>
+                                </button>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="reasoningCheck">
+                                    <label class="form-check-label" for="reasoningCheck">Include reasoning</label>
+                                </div>
+                            </div>
+                            
+                            <textarea id="userInput" class="form-control" rows="3" placeholder="Type your message here..."></textarea>
+                            
+                            <div class="d-flex justify-content-end mt-2">
+                                <button id="sendBtn" class="btn btn-primary">
+                                    <i class="fas fa-paper-plane me-1"></i>Send
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- File attachments area (hidden by default) -->
+                <div id="attachmentsContainer" class="mt-3 d-none">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h6 class="mb-0">Attached Files</h6>
+                            <button id="clearAttachmentsBtn" class="btn btn-sm btn-outline-danger">
+                                <i class="fas fa-times"></i> Clear All
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <ul id="attachmentsList" class="list-group list-group-flush">
+                                <!-- Attachments will be added here -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- jQuery -->
+    <script th:src="@{/webjars/jquery/3.6.4/jquery.min.js}"></script>
+    
+    <!-- Bootstrap JS -->
+    <script th:src="@{/webjars/bootstrap/5.2.3/js/bootstrap.bundle.min.js}"></script>
+    
+    <!-- Marked for Markdown parsing -->
+    <script th:src="@{/webjars/marked/4.3.0/marked.min.js}"></script>
+    
+    <!-- Highlight.js for code highlighting -->
+    <script th:src="@{/webjars/highlight.js/11.7.0/highlight.min.js}"></script>
+    
+    <!-- Custom JS -->
+    <script th:src="@{/js/chat.js}"></script>
+</body>
+</html>
